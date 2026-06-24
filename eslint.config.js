@@ -1,19 +1,35 @@
-const eslintPluginPrettier = require('eslint-plugin-prettier');
+const tseslint = require('typescript-eslint');
 const eslintConfigPrettier = require('eslint-config-prettier');
 
 module.exports = [
   {
-    // Игнорируем системные папки, чтобы линтер там не спотыкался
-    ignores: ['node_modules/**', '.expo/**', 'web-build/**', 'assets/**'],
+    ignores: [
+      'node_modules/**',
+      '.expo/**',
+      'web-build/**',
+      'assets/**',
+      '.husky/**',
+    ],
   },
+
+  ...tseslint.configs.recommended,
+
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
-    plugins: {
-      prettier: eslintPluginPrettier,
+    files: ['**/*.{ts,tsx,js,jsx}'],
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
     },
     rules: {
       ...eslintConfigPrettier.rules,
-      'prettier/prettier': 'error',
+
+      '@typescript-eslint/no-require-imports': 'off',
+
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-vars': 'warn',
     },
   },
 ];
